@@ -29,9 +29,14 @@ public class UsuarioServicioController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
     }
 
+    // RF1
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioServicio crear(@RequestBody UsuarioServicio usuario) {
+        if (repo.findByCedula(usuario.getCedula()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ya existe un usuario de servicios con ese documento");
+        }
         return repo.save(usuario);
     }
 
